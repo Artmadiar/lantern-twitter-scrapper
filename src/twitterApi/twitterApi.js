@@ -23,6 +23,9 @@ const client = new Client(twitterToken);
 const fetchTweetsRecursively = async ({ userId, pagination_token }) => {
   const opts = {
     maxResults: 100,
+    expansions: ['attachments.media_keys'],
+    'media.fields': ['height', 'width', 'preview_image_url', 'type', 'url'],
+    'tweet.fields': ['attachments', 'created_at', 'public_metrics', 'possibly_sensitive', 'text'],
   }
   if (pagination_token) {
     opts.pagination_token = pagination_token;
@@ -62,9 +65,11 @@ module.exports.fetchTweets = async (userId) => {
 module.exports.fetchUser = async (username) => {
   // mock for testing
   if (env === 'test') {
-    return mockTwitterApi.users.data;
+    return mockTwitterApi.user.data;
   }
 
-  const user = await client.users.findUserByUsername(username);
-  return user;
+  const user = await client.users.findUserByUsername(username, {
+    'user.fields': ['name', 'profile_image_url', 'username', 'verified', 'verified_type'],
+  });
+  return user.data;
 }

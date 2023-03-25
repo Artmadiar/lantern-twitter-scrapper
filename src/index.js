@@ -27,7 +27,7 @@ app.post('/tweets', async (req, res) => {
     const tweets = await fetchTweets({ userId: user.id });
 
     // Create PDF
-    const pdfDoc = createPdf({ tweets, username });
+    const pdfDoc = await createPdf({ tweets, user });
 
     // Send PDF
     res.setHeader('Content-Type', 'application/pdf');
