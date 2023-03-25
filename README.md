@@ -36,3 +36,4 @@ https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get
 - [ ] test it with real API token
 - [ ] add user verification info (verified, verified_type)?
 - [ ] render tweet in the same way as it is on twitter?
+- [ ] use cheerio to fetch data without twitter API and snapshot tweets as they are?
