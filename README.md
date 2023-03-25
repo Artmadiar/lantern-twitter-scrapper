@@ -33,4 +33,6 @@ https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get
 
 
 ### TODO
-- [ ] add user verification info (verified, verified_type)
+- [ ] test it with real API token
+- [ ] add user verification info (verified, verified_type)?
+- [ ] render tweet in the same way as it is on twitter?
