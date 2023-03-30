@@ -1,8 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
-const { fetchUser, fetchTweets } = require('./twitterApi/twitterApi');
-const { createPdf } = require('./tools');
+const { startBrowser, parseUser } = require('./twitterParser');
 
 const PORT = process.env.PORT || 3000;
 
@@ -11,29 +10,17 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Initialize Puppeteer
+startBrowser();
+
 // Routes
 app.post('/tweets', async (req, res) => {
   const username = req.body.username;
+  const tweetCount = req.body.tweetCount;
 
   try {
-    const user = await fetchUser({ username });
-
-    // Check if user exists
-    if (!user) {
-      return res.status(404).send('User not found');
-    }
-
-    // Get last 100 tweets
-    const tweets = await fetchTweets({ userId: user.id });
-
-    // Create PDF
-    const pdfDoc = await createPdf({ tweets, user });
-
-    // Send PDF
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="${username}_tweets.pdf"`);
-    pdfDoc.pipe(res);
-
+    const links = await parseUser({ username, tweetCount });
+    res.status(200).json(links);
   } catch (error) {
     console.log(error);
     res.status(500).send('Error scraping Twitter');
